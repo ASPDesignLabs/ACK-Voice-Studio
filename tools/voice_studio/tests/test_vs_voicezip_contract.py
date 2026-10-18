@@ -5,19 +5,24 @@ from pathlib import Path
 
 import pytest
 
+import vs_ack_source as ack
 from voice_studio.core import voicezip as vz
 
-ROOT = Path(__file__).resolve().parents[3]
-OUTPUT = ROOT / "app" / "src" / "main" / "java" / "com" / "example" / "besu" / "output"
+pytestmark = ack.needs_ack            # the phone app is in its own repository: without a checkout of it these are skipped, saying how to run them
+
+OUTPUT = ack.APP / "output"
 MANAGER = OUTPUT / "CustomVoiceBackupManager.kt"
 REPOSITORY = OUTPUT / "CustomVoiceRepository.kt"
 ENGINE = OUTPUT / "PiperVoiceEngine.kt"
+PATCHER = Path(__file__).resolve().parents[2] / "patch_voice_for_sherpa_onnx.py"          # this repository's own copy of the patcher
 
 
 def source(path):
-    if not path.is_file():
-        pytest.fail("ACK's source file %s is not where this test expects it: if it moved, this test and voicezip.py must follow" % path.relative_to(ROOT))
-    return path.read_text(encoding="utf-8")
+    """A file of the phone app (a path under app/src/...), or this repository's patcher (an absolute path)."""
+    full = path if path.is_absolute() else ack.path(*path.parts)
+    if not full.is_file():
+        pytest.fail("ACK's source file %s is not where this test expects it: if it moved, this test and voicezip.py must follow" % path)
+    return full.read_text(encoding="utf-8")
 
 
 def constant(text, name):
@@ -69,8 +74,8 @@ def test_acks_export_writes_the_same_two_entries_in_the_same_order():
 
 def test_the_metadata_acks_engine_leans_on_is_what_the_patcher_writes_and_this_checks():
     engine = source(ENGINE)
-    assert "piper" in engine.lower() and "sample_rate" in source(Path(__file__).resolve().parents[2] / "patch_voice_for_sherpa_onnx.py")
-    patcher = source(Path(__file__).resolve().parents[2] / "patch_voice_for_sherpa_onnx.py")
+    assert "piper" in engine.lower() and "sample_rate" in source(PATCHER)
+    patcher = source(PATCHER)
     for key in vz.REQUIRED_METADATA:
         assert '"%s"' % key in patcher, key
 

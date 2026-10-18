@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+import vs_ack_source as ack
 from voice_studio.core import connection, fetch, jobs, preflight, registry as reg, setupplan as sp
 from voice_studio.core.envspec import load_environments
 from voice_studio.core.paths import DataHome
@@ -249,10 +250,15 @@ def test_the_player_order_the_page_gives_is_the_order_in_the_code():
     assert wsl in text
 
 
-def test_the_engine_version_the_page_gives_is_the_one_in_the_lock_and_the_one_the_phone_is_pinned_to():
+def test_the_engine_version_the_page_gives_is_the_one_in_the_lock():
     lock = (PKG / "data" / "locks" / "studio.lock.txt").read_text(encoding="utf-8")
-    phone = (REPO / "app" / "libs" / "README.md").read_text(encoding="utf-8")
-    assert "sherpa-onnx==1.13.8" in lock and "sherpa-onnx-core==1.13.8" in lock and "sherpa-onnx-1.13.8.aar" in phone and "sherpa-onnx 1.13.8" in section(7)
+    assert "sherpa-onnx==1.13.8" in lock and "sherpa-onnx-core==1.13.8" in lock and "sherpa-onnx 1.13.8" in section(7)
+
+
+@ack.needs_ack
+def test_the_engine_version_the_page_gives_is_the_one_the_phone_is_pinned_to():
+    phone = ack.path("app", "libs", "README.md").read_text(encoding="utf-8")
+    assert "sherpa-onnx-1.13.8.aar" in phone and "sherpa-onnx 1.13.8" in section(7)
 
 
 # ---------------------------------------------------------------- backing up a project (plan task VS-6.1)

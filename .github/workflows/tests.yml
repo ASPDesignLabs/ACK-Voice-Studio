@@ -1,0 +1,72 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Runs ACK Voice Studio's tests the way tools/voice_studio/run_tests.sh does (warnings are errors). Nothing here uses the tool's network commands: the tests use no network, no GPU and
+# no display. Only the setup steps of a run (pip, and the second job's checkout of the phone app) reach the internet, as any CI run must.
+#
+# NOT RUN YET: written without being able to run GitHub Actions. The first run on GitHub is the test of this file; read it before trusting it.
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  voice-studio:
+    # The tool supports Ubuntu 22.04 (Python 3.10) and 24.04 (Python 3.12), and its plain-Python core must run on the older one.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: A throwaway environment with pytest, on the system Python
+        run: |
+          python3 --version
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install pytest
+      - name: The tests that need nothing but this repository
+        env:
+          PYTHON: ${{ runner.temp }}/venv/bin/python
+        run: |
+          # PowerShell is on GitHub's Ubuntu images; the installer-engine tests that need it are skipped, saying so, where it is not.
+          command -v pwsh && export ACK_VS_PWSH="$(command -v pwsh)" || unset ACK_VS_PWSH
+          tools/voice_studio/run_tests.sh -rs
+
+  # The few tests that check what this tool writes against what the phone app reads (the voice file's layout, the list of sounds, the colours). They are skipped, saying why, in the job
+  # above. Here the phone app's repository is checked out beside this one, so they run.
+  #
+  # If ASPDesignLabs/ACK is private, a token that can read it is needed: add one as the repository secret ACK_READ_TOKEN (read-only, for that one repository). Without it this job falls
+  # back to the run's own token, which can read only this repository, and the checkout fails with a clear message.
+  contracts-with-the-phone-app:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: voice-studio
+      - uses: actions/checkout@v4
+        with:
+          repository: ASPDesignLabs/ACK
+          path: ACK
+          token: ${{ secrets.ACK_READ_TOKEN || github.token }}
+          sparse-checkout: |
+            app/src/main/java/com/example/besu
+            app/libs/README.md
+            CHANGELOG.md
+      - name: A throwaway environment with pytest
+        run: |
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install pytest
+      - name: The tests that read the phone app, and prove none was skipped
+        env:
+          PYTHON: ${{ runner.temp }}/venv/bin/python
+          ACK_SOURCE: ${{ github.workspace }}/ACK
+        run: |
+          cd voice-studio
+          tools/voice_studio/run_tests.sh -rs -k "contract or window_theme or it_guide or guide or ack_source" | tee "$RUNNER_TEMP/contracts.txt"
+          # A contract test that was skipped here means the phone app's files were not where the tests looked: that must be a failure, not a pass.
+          if grep -q "needs a checkout of the ACK phone app" "$RUNNER_TEMP/contracts.txt"; then echo "a phone-app test was skipped"; exit 1; fi

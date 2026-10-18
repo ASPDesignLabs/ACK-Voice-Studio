@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 
 import test_vs_device_test_doc as device_doc
+import vs_ack_source as ack
 from test_vs_text import JARGON
 from vs_startvoice_helpers import implies_permission
 from voice_studio.core import (backup_flow, commands, preflight, projects_flow, recordings_flow, refresh_flow, registry as reg, reportcmd_flow, rounds_flow, scratchmove_flow, startvoice,
@@ -151,15 +152,24 @@ def test_the_figures_the_guide_gives_are_the_codes():
         assert "8 GB or more of its own memory" in installation
 
 
+def test_the_handout_gives_the_300_megabytes_the_phone_needs():
+    assert "about 300 MB of free room" in text_of(HANDOUT)
+
+
+@ack.needs_ack
 def test_the_300_megabytes_the_handout_gives_are_the_phones():
-    kotlin = (ROOT / "app/src/main/java/com/example/besu/capture/TrainingData.kt").read_text(encoding="utf-8")
-    assert "MIN_FREE_TO_START_BYTES = 300L * 1024 * 1024" in kotlin and "about 300 MB of free room" in text_of(HANDOUT)
+    kotlin = ack.path("app", "src", "main", "java", "com", "example", "besu", "capture", "TrainingData.kt").read_text(encoding="utf-8")
+    assert "MIN_FREE_TO_START_BYTES = 300L * 1024 * 1024" in kotlin
 
 
-def test_the_free_speech_warning_is_in_both_pages_and_in_the_app():
+def test_the_free_speech_warning_is_in_both_pages():
     for page in (GUIDE, HANDOUT):
         assert "records anyone who is nearby" in text_of(page) or "records everyone nearby" in text_of(page)
-    assert "FREE SPEECH RECORDS EV" in (ROOT / "CHANGELOG.md").read_text(encoding="utf-8").upper()
+
+
+@ack.needs_ack
+def test_the_free_speech_warning_is_also_in_the_apps_own_changelog():
+    assert "FREE SPEECH RECORDS EV" in ack.path("CHANGELOG.md").read_text(encoding="utf-8").upper()
 
 
 # ---------------------------------------------------------------- everyday words (D19)

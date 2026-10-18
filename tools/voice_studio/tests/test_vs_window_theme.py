@@ -9,6 +9,7 @@ from pathlib import Path
 
 import pytest
 
+import vs_ack_source as ack
 from voice_studio.core import windowprefs as wp
 from voice_studio.core import windowtheme as wt
 from voice_studio.core.paths import DataHome
@@ -51,10 +52,15 @@ def test_the_check_itself_can_fail():
 def test_an_accent_that_is_not_one_of_the_ten_gets_the_default_and_the_ten_are_ACKs_own():
     assert wt.palette(99) == wt.palette(0) and wt.palette(-1) == wt.palette(0)
     assert [c for _n, c in wt.ACCENTS] == ["#00f3ff", "#ff0055", "#00ff41", "#ff9900", "#bd00ff", "#ffd500", "#0055ff", "#ff00ff", "#b7ff00", "#ff0099"]
-    kotlin = (PKG.parents[1] / "app/src/main/java/com/example/besu/ui/theme/Color.kt").read_text()
+    assert (wt.VOID, wt.GRAPHITE) == ("#050505", "#121212")
+
+
+@ack.needs_ack
+def test_the_ten_accents_and_the_two_backgrounds_are_the_ones_in_the_phone_apps_own_source():
+    kotlin = ack.path("app", "src", "main", "java", "com", "example", "besu", "ui", "theme", "Color.kt").read_text()
     for _name, color in wt.ACCENTS:
         assert "Color(0xFF%s)" % color[1:].upper() in kotlin, color                                       # the phone app's own swatches: a drift guard
-    assert (wt.VOID, wt.GRAPHITE) == ("#050505", "#121212") and "VoidBlack = Color(0xFF050505)" in kotlin and "Graphite = Color(0xFF121212)" in kotlin
+    assert "VoidBlack = Color(0xFF050505)" in kotlin and "Graphite = Color(0xFF121212)" in kotlin
 
 
 # ---------------------------------------------------------------- the choices

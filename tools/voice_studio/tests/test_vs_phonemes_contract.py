@@ -5,14 +5,16 @@ from pathlib import Path
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[3]
-ENGINE = ROOT / "app" / "src" / "main" / "java" / "com" / "example" / "besu" / "output" / "PiperVoiceEngine.kt"
+import vs_ack_source as ack
+
+pytestmark = ack.needs_ack            # the phone app is in its own repository: without a checkout of it these are skipped, saying how to run them
 
 
 def engine_text():
-    if not ENGINE.is_file():
-        pytest.fail("ACK's source file %s is not where this test expects it: if it moved, this test and core/phonemes.py must follow" % ENGINE.relative_to(ROOT))
-    return ENGINE.read_text(encoding="utf-8")
+    engine = ack.path("app", "src", "main", "java", "com", "example", "besu", "output", "PiperVoiceEngine.kt")
+    if not engine.is_file():
+        pytest.fail("ACK's source file %s is not where this test expects it: if it moved, this test and core/phonemes.py must follow" % engine.relative_to(ack.ACK))
+    return engine.read_text(encoding="utf-8")
 
 
 def rule_body():

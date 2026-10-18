@@ -18,11 +18,20 @@ def section():
     return FULL[start:nxt if nxt != -1 else len(FULL)]
 
 
-def test_the_section_is_there_once_and_the_older_sections_are_still_there():
+def test_the_section_is_there_once_and_the_sections_before_it_are_still_there():
+    """This file began as a section of the phone app's CLAUDE.md, which holds the app's own deep analyses (HELP, BACKUP and the rest); those stayed with the app. What came with the split is the
+    account of how the two repositories relate and the data-sovereignty and licensing rules, and both must stay in front of the tool's own rules."""
     assert FULL.count(HEADING) == 1
-    for older in ("## The HELP System — deep analysis", "## The BACKUP & RESTORE system — deep analysis", "## DATA SOVEREIGNTY and LICENSING — rules that must stay true",
-                  "## CLINICAL USE (Section 5 of the AAC Readiness Tracker) — rules that must stay true"):
+    for older in ("## How this repository relates to ACK", "## DATA SOVEREIGNTY and LICENSING — rules that must stay true"):
         assert FULL.count(older) == 1 and FULL.index(older) < FULL.index(HEADING), older
+    for gone in ("## The HELP System — deep analysis", "## The BACKUP & RESTORE system — deep analysis", "## CLINICAL USE (Section 5 of the AAC Readiness Tracker) — rules that must stay true"):
+        assert gone not in FULL, "the phone app's own section %r belongs to the phone app's repository" % gone
+
+
+def test_it_says_which_files_are_copies_and_where_the_phone_app_is():
+    body = " ".join(FULL.split())
+    for claim in ("`ASPDesignLabs/ACK`", "Freeform Studio and the training helpers are a copy", "ACK keeps its own copy too", "`ACK_SOURCE`", "`../ACK`", "skipped, saying why"):
+        assert claim in body, claim
 
 
 def test_every_file_and_test_it_names_exists():

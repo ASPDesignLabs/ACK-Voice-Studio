@@ -12,7 +12,8 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[3]
-pytestmark = pytest.mark.skipif(not (ROOT / "LICENSE").exists() or not (ROOT / "app").exists(), reason="not inside the full ACK repository")
+pytestmark = pytest.mark.skipif(not (ROOT / "LICENSE").exists() or not (ROOT / "NOTICE").exists(), reason="not inside a whole repository (no LICENSE and NOTICE at its top)")
+# (In the ACK Voice Studio repository this copy runs whole, so the licence checks are not lost there; the copy kept in the ACK phone app's repository still skips without the app.)
 
 GPL3_SHA256 = "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"       # the FSF's text, as shipped in Debian and Ubuntu
 APACHE2_SHA256 = "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
