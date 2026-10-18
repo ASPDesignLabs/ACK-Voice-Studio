@@ -4,6 +4,13 @@ Written 2026-10-14 by the agent that built the installation flow, for whoever pi
 Read this first, then `docs/VOICE_STUDIO_SETUP_PLAN.md` (the plan, every decision D1 to D40, every finding F1 to F34, every task VS-x.y with an "As built" note).
 Everything under `tools/voice_studio/` is the tool; `tools/freeform_studio/` is the older server it reuses for processing recordings.
 
+> **Update 2026-10-18 (the split, decision D45).** ACK Voice Studio now lives in its own repository, `ASPDesignLabs/ACK-Voice-Studio`, split out of the ACK phone app's repository with the history of its own files kept. Every commit hash, branch name and PR number
+> in this file and in the plan is ACK's, from before the split. Freeform Studio and the training helpers it runs are a **snapshot copy** (ACK keeps its own); `CLAUDE.md` ("How this repository relates to ACK") has the rules, and says which files must be changed in both places.
+> What changed in the code: the repository addresses (`install.ps1`, `get.sh`, `data/sources.json`, the wizard's text, the guides); `get.sh` now says so and leaves alone a `~/ack-tools` fetched from the phone app's repository, where it used to offer `git pull` (which would have followed the old
+> address); the update command's lines no longer say that the repository holds the app's tags. The tests that read the phone app's Kotlin and files are skipped, saying why, unless the phone app is at `../ACK` or `ACK_SOURCE` (`tests/vs_ack_source.py`, `test_vs_ack_source.py`).
+> **Not run:** the CI workflows in `.github/workflows/tests.yml` (written without being able to run GitHub Actions; if ASPDesignLabs/ACK is private its second job needs a read token in the secret `ACK_READ_TOKEN`), and anything on a real computer. Freeform Studio's own suite is not part of this repository's CI.
+> The older blocks below say "ACK" where they mean the phone app's repository, and name `main` as it was there.
+>
 > **Update 2026-10-15 (the next agent's first session).** The preview is **built and tested in the sandbox, not yet heard on a real computer**: `python3 -m voice_studio.voicefile listen`,
 > plan task VS-5.4, evidence F35, choices P15, checklist section I8 (part B decides how it plays). The studio environment's lock gained sherpa-onnx, so the studio programs build again beside
 > the old ones. **Refresh is defined** (D41, task VS-6.6): a reinstall that does not wipe data, with a check way and a full-rebuild way; it is not built. The window did not offer to listen
