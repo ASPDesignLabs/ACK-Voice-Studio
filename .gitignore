@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Logs and test output
+*.log
+
+# Built files (the Windows setup program is built by tools/voice_studio/installer/build.sh and published, not committed)
+dist/
+*.exe
+
+# Archives. A voice file, a project backup or a training package is a person's own data and is never committed.
+# (Test fixtures that need one are added with `git add -f` on purpose.)
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.rar
+
+# Keys and certificates made on a computer (the phone certificate authority, a signing key)
+*.key
+*.p12
+*.jks
+*.pem
+
+# Where the tool keeps a person's projects if it is run from inside a checkout
+ack-voice-studio/
