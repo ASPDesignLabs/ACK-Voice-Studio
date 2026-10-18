@@ -751,7 +751,7 @@ def test_the_setup_runs_the_hand_over_as_the_account_answered_yes_and_without_op
     assert arguments[:6] == ["-d", "Ubuntu-24.04", "-u", "anna", "--cd", "~"] and arguments[6:9] == ["--exec", "bash", "-c"]
     command = arguments[9]
     assert "--yes --no-window" in command and "ACK_VOICE_TAG='main'" in command and '"' not in command and "\n" not in command
-    assert "https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/get.sh" in command
+    assert "https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/get.sh" in command
 
 
 @needs_pwsh

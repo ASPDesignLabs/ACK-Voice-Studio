@@ -7,8 +7,8 @@ a **new folder** that must not exist yet, so this copy, and everything in it tha
 then builds only the programs whose list changed, beside the old ones, and checks each before it counts). After the fetch the copy is checked: the commit it holds is the commit the
 release was listed with, and it is a copy of this tool. If either is not true, the folder this program made is removed again and nothing else is.
 
-What a release is, is its git tag. ACK's repository also holds the phone app's tags (`v1.0-beta.7`), which are not releases of this tool, so the tags that count are the ones whose names begin with the
-prefix the registry gives (`voice-studio-`); the person types and sees the name without it (`v0.1.0` for the tag `voice-studio-v0.1.0`). Names that look like a number with dots (`v1.2`, `1.2.3`) are ordered;
+What a release is, is its git tag. The phone app's repository, where this tool lived until it was split out, holds the app's tags (`v1.0-beta.7`), which are not releases of this tool; so, whatever a repository
+holds, the tags that count are the ones whose names begin with the prefix the registry gives (`voice-studio-`); the person types and sees the name without it (`v0.1.0` for the tag `voice-studio-v0.1.0`). Names that look like a number with dots (`v1.2`, `1.2.3`) are ordered;
 any other name is listed and cannot be called newer. Whether this copy is at a release is read from the files of its `.git` folder (no program is started for that): a copy that is not at a release cannot be
 compared, and is told so.
 

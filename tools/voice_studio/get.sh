@@ -10,7 +10,7 @@
 # Settings (environment):  ACK_VOICE_TAG (the release, tag or branch to fetch; default below)   ACK_VOICE_DIR (where to put it; default ~/ack-tools)
 set -u
 
-REPO_URL="https://github.com/ASPDesignLabs/ACK.git"
+REPO_URL="https://github.com/ASPDesignLabs/ACK-Voice-Studio.git"
 DEFAULT_TAG="main"          # what is fetched when nothing is chosen. When a release is cut, this one word becomes its name (install.ps1 holds the same word)
 TAG="${ACK_VOICE_TAG:-$DEFAULT_TAG}"
 DEST="${ACK_VOICE_DIR:-$HOME/ack-tools}"
@@ -51,6 +51,15 @@ check_copy() {
   command -v git >/dev/null 2>&1 || return 0
   [ "$(git -C "$DEST" rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ] || return 0
   here=$(git -C "$DEST" rev-parse HEAD 2>/dev/null) || return 0
+  # ACK Voice Studio used to be kept inside the ACK phone app's repository. A copy fetched from there is never "updated" from here: its history is a different one, and
+  # pulling from the old address could take files away. It is said and left exactly as it is; moving it aside and fetching again is the person's decision.
+  origin=$(git -C "$DEST" remote get-url origin 2>/dev/null) || origin=""
+  if [ -n "$origin" ] && [ "${origin%.git}" != "${REPO_URL%.git}" ]; then
+    say "The copy of ACK Voice Studio at $DEST was fetched from $origin, but ACK Voice Studio is kept at $REPO_URL now."
+    say "It was left exactly as it is, and nothing was fetched or changed. Your projects and recordings are in ack-voice-studio, not here."
+    say "To use the current files, move this folder aside (it keeps everything) and run the same command again:  mv $DEST $DEST.old"
+    return 0
+  fi
   listing=$(git ls-remote "$REPO_URL" "refs/heads/$TAG" "refs/tags/$TAG" "refs/tags/$TAG^{}" 2>/dev/null </dev/null)
   there=${listing##*$'\n'}
   there=${there%%[[:space:]]*}

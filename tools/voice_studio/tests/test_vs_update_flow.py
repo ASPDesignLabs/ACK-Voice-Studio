@@ -64,7 +64,7 @@ def test_check_says_where_this_copy_is_what_it_will_ask_and_what_the_request_car
     said = [t for kind, t in io.events[:ask] if kind == "say"]
     assert said[:3] == ["ACK Voice Studio: update", "This copy is version 1.0.0, in %s." % rig.here, "It contacts the internet to ask which releases of ACK Voice Studio exist, and to fetch one when you choose."]
     assert "Like any request on the internet it carries this computer's address and the name of the program asking. Nothing you recorded, typed or made is sent, and nothing is saved." in said
-    assert "This asks %s for the list of tags in ACK's repository, with one command: git ls-remote --tags %s" % (rig.source.url, rig.source.url) in said
+    assert "This asks %s for the list of tags in the ACK Voice Studio repository, with one command: git ls-remote --tags %s" % (rig.source.url, rig.source.url) in said
 
 
 def test_with_nobody_to_ask_nothing_is_contacted(rig):
@@ -484,7 +484,7 @@ def test_check_says_which_tags_count_before_it_asks_and_not_when_there_is_no_pre
     code, io = run(mixed, "check", answers=["no"])
     ask = io.events.index(("ask", io.prompts[0]))
     said = [t for kind, t in io.events[:ask] if kind == "say"]
-    assert "Only tags whose names begin with %s are releases of this tool. ACK's repository also holds the phone app's tags, and those are left out." % PREFIX in said
+    assert "Only tags whose names begin with %s are releases of this tool. Any other tag is left out." % PREFIX in said
     (tmp_path / "plain").mkdir()
     plain = UpdateRig(tmp_path / "plain")
     code, io = run(plain, "check", answers=["no"])

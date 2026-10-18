@@ -50,7 +50,7 @@ def problems(tag: str, version: str, changelog: str, get_sh: str, install_ps1: s
     if not ps1 or ps1.group(1) != tag:
         found.append("install.ps1 fetches %s by default, not %s." % (ps1.group(1) if ps1 else "nothing", tag))
     liner = re.search(r"OneLiner\s*=\s*'([^']*)'", install_ps1)
-    if not liner or "/ASPDesignLabs/ACK/%s/" % tag not in liner.group(1):
+    if not liner or "/ASPDesignLabs/ACK-Voice-Studio/%s/" % tag not in liner.group(1):
         found.append("The one command in install.ps1 does not fetch %s." % tag)
     for name_of_place, text in places.items():
         if SAYS_MAIN.search(text):
@@ -68,7 +68,7 @@ PLACES = ("docs/ACK_Voice_Studio_Installation_Guide.MD", "docs/ACK_Voice_Studio_
           "tools/voice_studio/README.md")          # where the runbook's step 4 says the default release is written in words
 
 GOOD = dict(tag="voice-studio-v0.2.0", version="0.2.0", changelog="# x\n\n## [0.2.0] - 2026-11-01\n\n## [0.1.0] - 2026-10-20\n",
-            get_sh='set -u\nDEFAULT_TAG="voice-studio-v0.2.0"   # x\n', install_ps1="DefaultRef = 'voice-studio-v0.2.0'\nOneLiner = 'irm https://raw.githubusercontent.com/ASPDesignLabs/ACK/voice-studio-v0.2.0/tools/voice_studio/install.ps1 | iex'\n",
+            get_sh='set -u\nDEFAULT_TAG="voice-studio-v0.2.0"   # x\n', install_ps1="DefaultRef = 'voice-studio-v0.2.0'\nOneLiner = 'irm https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/voice-studio-v0.2.0/tools/voice_studio/install.ps1 | iex'\n",
             existing_tags=("v1.0-beta.7", "voice-studio-v0.1.0"), prefix="voice-studio-")
 
 
@@ -89,7 +89,7 @@ def test_a_tag_that_is_not_the_tools_form_is_refused_with_the_form_it_should_hav
 
 def test_the_form_is_checked_against_the_prefix_the_registry_gives():
     assert check(tag="voice-studio-v0.2.0", prefix="studio-") == ["The tag must look like studio-v1.2.3 (the registry counts only tags that begin with studio-)."]
-    other = dict(tag="a-v0.2.0", prefix="a-", get_sh='DEFAULT_TAG="a-v0.2.0"', install_ps1="DefaultRef = 'a-v0.2.0'\nOneLiner = '/ASPDesignLabs/ACK/a-v0.2.0/'", existing_tags=("a-v0.1.0", "voice-studio-v9.0.0"))
+    other = dict(tag="a-v0.2.0", prefix="a-", get_sh='DEFAULT_TAG="a-v0.2.0"', install_ps1="DefaultRef = 'a-v0.2.0'\nOneLiner = '/ASPDesignLabs/ACK-Voice-Studio/a-v0.2.0/'", existing_tags=("a-v0.1.0", "voice-studio-v9.0.0"))
     assert check(**other) == [], "the form follows the prefix, and a tag with another prefix is not an earlier release"
 
 
@@ -113,7 +113,7 @@ def test_both_installers_and_the_one_command_must_fetch_the_tag():
     ps1 = GOOD["install_ps1"]
     assert check(install_ps1=ps1.replace("DefaultRef = 'voice-studio-v0.2.0'", "DefaultRef = 'main'")) == ["install.ps1 fetches main by default, not voice-studio-v0.2.0."]
     assert check(install_ps1=ps1.split("\n")[1]) == ["install.ps1 fetches nothing by default, not voice-studio-v0.2.0."]
-    assert check(install_ps1=ps1.replace("ACK/voice-studio-v0.2.0/tools", "ACK/main/tools")) == ["The one command in install.ps1 does not fetch voice-studio-v0.2.0."]
+    assert check(install_ps1=ps1.replace("ACK-Voice-Studio/voice-studio-v0.2.0/tools", "ACK-Voice-Studio/main/tools")) == ["The one command in install.ps1 does not fetch voice-studio-v0.2.0."]
     assert check(install_ps1=ps1.split("\n")[0]) == ["The one command in install.ps1 does not fetch voice-studio-v0.2.0."]
 
 
@@ -159,8 +159,8 @@ def test_a_default_that_is_empty_is_said_to_be_nothing():
 
 def test_the_one_command_must_name_the_tag_where_the_repository_path_has_it_and_for_the_right_repository():
     base = GOOD["install_ps1"].split("\n")[0] + "\n"
-    elsewhere = base + "OneLiner = 'irm https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/voice-studio-v0.2.0.ps1 | iex'\n"
-    other_owner = base + "OneLiner = 'irm https://raw.githubusercontent.com/xASPDesignLabs/ACK/voice-studio-v0.2.0/tools/voice_studio/install.ps1 | iex'\n"
+    elsewhere = base + "OneLiner = 'irm https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/voice-studio-v0.2.0.ps1 | iex'\n"
+    other_owner = base + "OneLiner = 'irm https://raw.githubusercontent.com/xASPDesignLabs/ACK-Voice-Studio/voice-studio-v0.2.0/tools/voice_studio/install.ps1 | iex'\n"
     assert check(install_ps1=elsewhere) == ["The one command in install.ps1 does not fetch voice-studio-v0.2.0."]
     assert check(install_ps1=other_owner) == ["The one command in install.ps1 does not fetch voice-studio-v0.2.0."]
 

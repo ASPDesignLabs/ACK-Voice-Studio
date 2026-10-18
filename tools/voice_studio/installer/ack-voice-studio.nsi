@@ -2,7 +2,7 @@
 ; ACK Voice Studio setup wizard (plan decision D44, choices P28).
 ;
 ; What it is: a small Windows program that asks a few questions in ordinary windows and then runs the PowerShell engine (engine.ps1, beside it) one step at a time. The engine does the
-; work; this file only asks, shows what the engine said, and stops when a step fails. It holds no copy of ACK: the program is fetched from its source (GitHub, see install.ps1) while
+; work; this file only asks, shows what the engine said, and stops when a step fails. It holds no copy of ACK Voice Studio: the program is fetched from its source (GitHub, see install.ps1) while
 ; it runs, so what is installed is always what that source holds, with its licence.
 ;
 ; Built with NSIS (makensis), for Windows 11 only, for one user (no administrator rights; Windows asks once, inside the engine, when WSL itself is set up). Not signed yet. It has no
@@ -214,11 +214,11 @@ Function SourcesCreate
   ${NSD_CreateMLText} 0 0 100% 100% ""
   Pop $Edit
   SendMessage $Edit ${EM_SETREADONLY} 1 0
-  StrCpy $R0 "This setup program holds no copy of ACK. It fetches the program from its source while it runs:"
+  StrCpy $R0 "This setup program holds no copy of ACK Voice Studio. It fetches the program from its source while it runs:"
   Call AddLine
   StrCpy $R0 ""
   Call AddLine
-  StrCpy $R0 "- ACK and ACK Voice Studio: from github.com/ASPDesignLabs/ACK, the files as they are there now. They are shared under the GPL, version 3 or later (the licence on the previous page)."
+  StrCpy $R0 "- ACK Voice Studio: from github.com/ASPDesignLabs/ACK-Voice-Studio, the files as they are there now. They are shared under the GPL, version 3 or later (the licence on the previous page)."
   Call AddLine
   StrCpy $R0 "- Ubuntu 24.04 and WSL: from Microsoft, through Windows. Windows asks you once to allow setting up WSL."
   Call AddLine

@@ -315,14 +315,14 @@ def handover(tmp_path, ref="main"):
 def test_the_ubuntu_command_is_one_line_with_no_double_quote_so_windows_passes_it_on_as_one_piece(tmp_path):
     command = handover(tmp_path)
     assert "\n" not in command and "\r" not in command and '"' not in command
-    assert command.count("https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/get.sh") == 2        # once for curl, once for wget
+    assert command.count("https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/get.sh") == 2        # once for curl, once for wget
     assert "ACK_VOICE_TAG='main'" in command
 
 
 @needs_pwsh
 def test_the_ubuntu_command_names_the_chosen_release_in_the_address_and_in_the_variable(tmp_path):
     command = handover(tmp_path, "claude/voice-studio-guided-setup")
-    assert "ASPDesignLabs/ACK/claude/voice-studio-guided-setup/tools/voice_studio/get.sh" in command and "ACK_VOICE_TAG='claude/voice-studio-guided-setup'" in command
+    assert "ASPDesignLabs/ACK-Voice-Studio/claude/voice-studio-guided-setup/tools/voice_studio/get.sh" in command and "ACK_VOICE_TAG='claude/voice-studio-guided-setup'" in command
     assert "main" not in command.replace("voice_studio", "")
 
 
@@ -366,7 +366,7 @@ def test_the_ubuntu_command_fetches_get_sh_with_curl_and_runs_it_with_the_releas
                                   "printf '#!/bin/sh\\necho \"ran with tag=$ACK_VOICE_TAG from %s\"\\nexit 7\\n' \"$url\" > \"$out\"\n")
     (bin_dir / "curl").chmod(0o755)
     done = subprocess.run(["/bin/bash", "-c", handover(tmp_path, "v1.2")], capture_output=True, text=True, env={"PATH": str(bin_dir), "HOME": str(tmp_path)}, timeout=30)
-    assert done.returncode == 7 and "ran with tag=v1.2 from https://raw.githubusercontent.com/ASPDesignLabs/ACK/v1.2/tools/voice_studio/get.sh" in done.stdout
+    assert done.returncode == 7 and "ran with tag=v1.2 from https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/v1.2/tools/voice_studio/get.sh" in done.stdout
     assert not list(Path("/tmp").glob("tmp.*")) or True
 
 
@@ -943,14 +943,14 @@ def test_it_makes_no_web_request_of_its_own_and_evaluates_nothing():
 def test_the_only_web_addresses_are_the_raw_files_of_the_one_repository():
     for number, line in enumerate(SCRIPT.read_text().splitlines(), 1):
         for address in re.findall(r"https?://[^\s'\"|)]+", line):
-            assert address.startswith("https://raw.githubusercontent.com/ASPDesignLabs/ACK/") or address == "https://raw.githubusercontent.com", (number, address)
+            assert address.startswith("https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/") or address == "https://raw.githubusercontent.com", (number, address)
 
 
 def test_the_one_liner_in_the_file_is_the_command_that_fetches_this_very_file_from_the_default_release():
     code = SCRIPT.read_text()
     default = re.search(r"DefaultRef\s*=\s*'([^']+)'", code).group(1)
     one_liner = re.search(r"OneLiner\s*=\s*'([^']+)'", code).group(1)
-    assert one_liner == "irm https://raw.githubusercontent.com/ASPDesignLabs/ACK/%s/tools/voice_studio/install.ps1 | iex" % default
+    assert one_liner == "irm https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/%s/tools/voice_studio/install.ps1 | iex" % default
     assert (PKG / "install.ps1").is_file() and (PKG / "get.sh").is_file()
     assert "# " + one_liner.replace("irm ", "  irm ", 1).strip() in [l.strip() for l in code.splitlines()] or one_liner in code
 

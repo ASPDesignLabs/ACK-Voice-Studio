@@ -13,7 +13,7 @@ only been tested without a real phone.
 ## Install (once)
 
 ```bash
-git clone --depth 1 https://github.com/ASPDesignLabs/ACK.git ~/ack-tools
+git clone --depth 1 https://github.com/ASPDesignLabs/ACK-Voice-Studio.git ~/ack-tools
 ~/ack-tools/tools/freeform_studio/install.sh
 ```
 The installer makes its own virtual environment (`~/freeform-studio-venv`), so nothing here can disturb the recorder or your

@@ -32,13 +32,13 @@ The tool never installs a graphics driver. If you have an Nvidia card and no dri
 Open a terminal (press Ctrl+Alt+T) and paste this line, then press Enter:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/get.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/get.sh | bash
 ```
 
 If your Ubuntu has no `curl`, this does the same with `wget`:
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/get.sh | bash
+wget -qO- https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/get.sh | bash
 ```
 
 The script it fetches is short. It fetches ACK's files into `ack-tools` in your home folder, and hands over to the setup. It never changes a folder that is already there unless you say yes to updating it (step 1), and it never edits your shell settings.
@@ -56,7 +56,7 @@ It is safe to run the command again at any point. It finds what is done and carr
 ### Looking first, changing nothing
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/get.sh | bash -s -- --dry-run
+curl -fsSL https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/get.sh | bash -s -- --dry-run
 ```
 
 It prints the exact commands it would run, and runs none of them. `--check` does the same. Once ACK's files are in place, you can look at this computer without changing anything:
@@ -70,7 +70,7 @@ It says what is missing and exits with code 1 if something needs fixing, or `Rea
 ### If you want to read the script before running it
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/get.sh -o ~/get-ack-voice-studio.sh
+curl -fsSL https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/get.sh -o ~/get-ack-voice-studio.sh
 less ~/get-ack-voice-studio.sh
 bash ~/get-ack-voice-studio.sh
 ```
@@ -260,5 +260,5 @@ Every file the tool downloads is checked against a fixed size and fingerprint be
 Put a setting on the `bash` side of the pipe, so that it reaches the script. For example, to fetch into another folder:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/get.sh | ACK_VOICE_DIR=~/my-ack bash
+curl -fsSL https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/get.sh | ACK_VOICE_DIR=~/my-ack bash
 ```

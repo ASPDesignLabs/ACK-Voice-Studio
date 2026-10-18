@@ -24,7 +24,7 @@ The file is the same bytes every time for the same sources. It holds **no copy o
 
 ## What it fetches, and from where
 
-The wizard names these before it goes on. The program comes from `github.com/ASPDesignLabs/ACK` (the files as they are there at run time), Ubuntu 24.04 and WSL from Microsoft,
+The wizard names these before it goes on. The program comes from `github.com/ASPDesignLabs/ACK-Voice-Studio` (the files as they are there at run time), Ubuntu 24.04 and WSL from Microsoft,
 Ubuntu's own programs from Ubuntu's archives, and the training programs and the starting voice from the places the tool lists, each with its own terms.
 
 **To fetch from somewhere else** (a mirror, or a self-hosted source), change these and rebuild:

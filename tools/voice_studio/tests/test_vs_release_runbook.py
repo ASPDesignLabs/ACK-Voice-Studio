@@ -60,5 +60,5 @@ def test_it_says_a_published_tag_is_never_moved_that_a_tag_is_not_signed_and_tha
                   "**A release must not say a step works when the checklist has no real run of it.**", "A lock or a pin is **not** remade only because time has passed",
                   "Make the next version instead"):
         assert claim in BODY, claim
-    assert "git tag -a voice-studio-vX.Y.Z" in DOC and "git push origin voice-studio-vX.Y.Z" in DOC and "git ls-remote --tags https://github.com/ASPDesignLabs/ACK.git 'voice-studio-*'" in DOC
-    assert reg.load_release_source().url == "https://github.com/ASPDesignLabs/ACK.git"
+    assert "git tag -a voice-studio-vX.Y.Z" in DOC and "git push origin voice-studio-vX.Y.Z" in DOC and "git ls-remote --tags https://github.com/ASPDesignLabs/ACK-Voice-Studio.git 'voice-studio-*'" in DOC
+    assert reg.load_release_source().url == "https://github.com/ASPDesignLabs/ACK-Voice-Studio.git"

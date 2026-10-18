@@ -139,7 +139,7 @@ def one_liner():
 
 def get_sh_address():
     default = re.search(r'DEFAULT_TAG="([^"]+)"', GET_SH).group(1)
-    return "https://raw.githubusercontent.com/ASPDesignLabs/ACK/%s/tools/voice_studio/get.sh" % default
+    return "https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/%s/tools/voice_studio/get.sh" % default
 
 
 def test_the_windows_guides_one_command_is_the_one_the_script_holds_and_it_comes_first():
@@ -157,9 +157,9 @@ def test_the_ubuntu_guides_one_command_is_built_from_get_shs_own_address_and_def
 def test_every_address_in_a_guide_is_a_raw_file_or_the_repository_the_script_names():
     for path in GUIDES.values():
         for address in set(re.findall(r"https?://[^\s`'\"|)]+", text_of(path))):
-            assert address.startswith("https://raw.githubusercontent.com/ASPDesignLabs/ACK/"), (path.name, address)
+            assert address.startswith("https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/"), (path.name, address)
             assert address.endswith(("install.ps1", "get.sh")), (path.name, address)
-    assert re.search(r'REPO_URL="https://github.com/ASPDesignLabs/ACK.git"', GET_SH)
+    assert re.search(r'REPO_URL="https://github.com/ASPDesignLabs/ACK-Voice-Studio.git"', GET_SH)
 
 
 def test_the_release_a_guide_fetches_is_the_one_both_scripts_default_to_and_says_so():
@@ -451,7 +451,7 @@ def test_the_checklist_section_for_the_installation_quotes_only_what_the_tool_sa
 def test_the_checklist_section_names_both_guides_and_the_commands_the_guides_give():
     body = checklist_section()
     assert WIN.name in body and UBU.name in body and one_liner() in body
-    assert "irm https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/install.ps1 | iex" in body
+    assert "irm https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/install.ps1 | iex" in body
     for option in ("ACK_VOICE_CHECK", "ACK_VOICE_DRYRUN", "-Distro", "-Ref", "ACK_VOICE_TAG"):
         assert option in body
 

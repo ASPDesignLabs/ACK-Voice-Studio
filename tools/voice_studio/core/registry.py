@@ -26,7 +26,7 @@ DEFAULT_PATH = Path(__file__).resolve().parent.parent / "data" / "sources.json"
 PIN_FIELDS = ("url", "filename", "revision", "size_bytes", "sha256")
 MAX_PAGE_LENGTH = 300
 PAGE_ADDRESS = re.compile(r"^[\x21-\x7e]+\Z")             # printable ASCII with no white space: an address that can be read aloud and copied
-TAG_PREFIX = re.compile(r"^[A-Za-z0-9._-]{0,32}\Z")                    # what a release tag of the tool must begin with, so the phone app's tags are not taken for releases
+TAG_PREFIX = re.compile(r"^[A-Za-z0-9._-]{0,32}\Z")                    # what a release tag of the tool must begin with, so a tag of any other kind (the phone app's, for one) is not taken for a release
 
 
 class RegistryError(Exception):
@@ -179,7 +179,7 @@ class ReleaseSource:
     """The one address the update command asks about ACK's own releases (plan task VS-6.2, decision P21): a git repository on an allowed host. It downloads no file of the registry."""
     url: str
     why_key: str
-    tag_prefix: str = ""          # only tags whose names begin with this are releases of the tool: the repository also holds the phone app's tags
+    tag_prefix: str = ""          # only tags whose names begin with this are releases of the tool; any other tag is left out
 
     @property
     def host(self) -> str:

@@ -1,15 +1,20 @@
 # ACK Voice Studio: changelog
 
-This is the changelog of ACK Voice Studio only (`tools/voice_studio/`). The Android app's changes are in `CHANGELOG.md` at the top of the repository, and nothing here changes
+This is the changelog of ACK Voice Studio only (`tools/voice_studio/`). The phone app's changes are in the changelog of the phone app's own repository (`ASPDesignLabs/ACK`), and nothing here changes
 that file or the notes the app shows with `/info`.
 
 The version is `__version__` in `tools/voice_studio/__init__.py`. A release of this tool is a git tag named `voice-studio-v` plus that version, for example `voice-studio-v0.1.0`
-(`docs/VOICE_STUDIO_RELEASE_RUNBOOK.md`). The repository's other tags (`v1.0-beta.1` and the rest) belong to the phone app and are not releases of this tool.
+(`docs/VOICE_STUDIO_RELEASE_RUNBOOK.md`). The phone app's tags (`v1.0-beta.1` and the rest) belong to the phone app's repository and are not releases of this tool.
 
 Everything below was built and tested in a build sandbox without a graphical screen, a speaker, a microphone, a GPU or a phone. What was and was not run on a real computer is
 listed, section by section, in `docs/VOICE_STUDIO_DEVICE_TEST.md`; nothing here says a step works on a real computer unless that checklist records it.
 
 ## [0.0.1] - Unreleased
+
+### Changed
+- **ACK Voice Studio now has its own repository, `ASPDesignLabs/ACK-Voice-Studio`.** It was built inside the ACK phone app's repository and was split out with the history of its own files kept. Nothing about what the tool does on a person's computer changed. The one-line
+  commands, the setup program's source and `python3 -m voice_studio.update` now name the new address (the old addresses print where the tool went and change nothing). `get.sh` no longer offers `git pull` on a `~/ack-tools` that was fetched from the phone app's
+  repository: it says so, leaves the folder as it is, and prints the `mv` that moves it aside (projects and recordings are in `~/ack-voice-studio`, a different folder). Freeform Studio and the training helpers it runs are a copy of the phone app's, kept here because the tool runs them.
 
 ### Added
 - **A setup program for Windows 11, so no terminal is needed to start.** `installer/` holds a wizard (`ACK-Voice-Studio-Setup-<version>.exe`, built with NSIS by `installer/build.sh`) that looks at the computer,

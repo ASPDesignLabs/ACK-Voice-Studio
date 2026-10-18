@@ -88,16 +88,18 @@ class Box:
         body = ('for last; do :; done\nDEST_OF_CLONE="$last"\n' + make) + ("exit 128\n" if fail else "")
         return self.stand_in("git", body)
 
-    def git_for_a_copy(self, *, inside=True, here="aaaa111", there="bbbb222", ahead=False, dirty=False, pull_fails=False, listing=True, annotated=False):
-        """A git that answers the questions get.sh asks of a copy that is already there, and records the rest."""
+    def git_for_a_copy(self, *, inside=True, here="aaaa111", there="bbbb222", ahead=False, dirty=False, pull_fails=False, listing=True, annotated=False, origin=None):
+        """A git that answers the questions get.sh asks of a copy that is already there, and records the rest. `origin` is the address the copy says it was fetched from (None: the
+        question is not answered at all, as an old git or a copy without a remote would)."""
         body = ('case "$*" in\n'
                 '  *"rev-parse --is-inside-work-tree"*) %s ;;\n'
+                '  *"remote get-url origin"*) %s ;;\n'
                 '  *"rev-parse HEAD"*) echo %s ;;\n'
                 '  *"ls-remote"*) %s ;;\n'
                 '  *"merge-base"*) exit %d ;;\n'
                 '  *"status --porcelain"*) %s ;;\n'
                 '  *" pull "*) echo "argc $#" >> "$CALLS"; exit %d ;;\n'
-                'esac\n') % ("echo true" if inside else "exit 128", here,
+                'esac\n') % ("echo true" if inside else "exit 128", ("echo '%s'" % origin) if origin else "exit 128", here,
                               (("printf 'tagobject9\\trefs/tags/main\\n%s\\trefs/tags/main^{}\\n'" if annotated else "printf '%s\\trefs/heads/main\\n'") % there) if listing else "exit 128",
                               0 if ahead else 1, 'echo " M changed.txt"' if dirty else "true", 1 if pull_fails else 0)
         return self.stand_in("git", body)
@@ -315,6 +317,36 @@ def test_the_check_only_looks_and_changes_nothing_before_a_yes(box):
     assert code == 0 and pull_calls(box) == []
     assert any("ls-remote" in c and URL in c and "refs/heads/main" in c for c in box.calls())
     assert "is not the same as ACK main" in out and "may be older" in out and "not touched" in out and "ack-voice-studio" in out
+
+
+# ---- ACK Voice Studio used to live inside the ACK phone app's repository. A copy fetched from there must never be "updated" from here (different history; a pull from the old address
+#      could remove the tool's files), so it is said, left alone and used as it is.
+
+OLD_HOME = "https://github.com/ASPDesignLabs/ACK.git"
+
+
+def test_a_copy_fetched_from_another_repository_is_said_and_left_exactly_as_it_is(box):
+    env = existing(box, origin=OLD_HOME)
+    code, out = box.bash(GET, "--no-window", env=env)
+    assert code == 0 and pull_calls(box) == [] and not any("ls-remote" in c for c in box.calls()), "nothing is looked up, nothing is changed"
+    assert "fetched from %s" % OLD_HOME in out and "kept at %s now" % URL in out and "left exactly as it is" in out and "ack-voice-studio" in out
+    assert "mv %s %s.old" % (box.dest, box.dest) in out and "Update the copy now?" not in out and "not the same" not in out
+    assert box.calls()[-1] == "setup.sh --no-window", "the copy that is there is still used, as before"
+
+
+@needs_pty
+def test_a_yes_cannot_pull_a_copy_that_came_from_another_repository(box):
+    env = existing(box, origin=OLD_HOME)
+    code, out = box.bash(GET, env=env, answers=["y"])
+    assert code == 0 and pull_calls(box) == [] and "Update the copy now?" not in out
+
+
+@pytest.mark.parametrize("origin", [URL, URL[:-4], None])
+def test_a_copy_from_the_right_address_or_one_that_cannot_say_is_checked_as_before(box, origin):
+    env = existing(box, origin=origin)
+    code, out = box.bash(GET, env=env)
+    assert code == 0 and pull_calls(box) == [] and "is not the same as ACK main" in out and "fetched from" not in out
+    assert any("ls-remote" in c and URL in c for c in box.calls())
 
 
 @needs_pty

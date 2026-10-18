@@ -46,7 +46,7 @@ def test_it_says_which_tag_is_a_release_the_way_the_registry_counts_one():
 
 def test_every_file_it_points_at_exists():
     named = {span for span in re.findall(r"`([^`\n]+)`", TEXT) if re.match(r"^(docs|tools)/[\w./-]+\.(md|py)$|^CHANGELOG\.md$", span)}
-    assert {"docs/VOICE_STUDIO_RELEASE_RUNBOOK.md", "docs/VOICE_STUDIO_DEVICE_TEST.md", "docs/VOICE_STUDIO_GUIDE.md", "tools/voice_studio/__init__.py", "CHANGELOG.md"} <= named
+    assert {"docs/VOICE_STUDIO_RELEASE_RUNBOOK.md", "docs/VOICE_STUDIO_DEVICE_TEST.md", "docs/VOICE_STUDIO_GUIDE.md", "tools/voice_studio/__init__.py"} <= named
     missing = sorted(name for name in named if not (ROOT / name).exists())
     assert not missing, missing
 

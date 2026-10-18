@@ -34,7 +34,7 @@ You will choose an Ubuntu user name and password the first time Ubuntu starts. T
 Open PowerShell and paste this line, then press Enter:
 
 ```powershell
-irm https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/install.ps1 | iex
+irm https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/install.ps1 | iex
 ```
 
 `irm` fetches the script, which is a short text file, and `iex` runs it. The script never asks for your Windows password, never changes PowerShell's script rules, and makes no web request of its own.
@@ -59,7 +59,7 @@ To see what would happen without doing any of it, set one thing and run the same
 
 ```powershell
 $env:ACK_VOICE_DRYRUN = '1'
-irm https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/install.ps1 | iex
+irm https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/install.ps1 | iex
 Remove-Item Env:ACK_VOICE_DRYRUN
 ```
 
@@ -70,7 +70,7 @@ It prints what it found and the exact commands it would run, and runs none of th
 This saves the script, lets you open it, and runs your saved copy for this one time without changing any PowerShell setting:
 
 ```powershell
-irm https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/install.ps1 -OutFile $env:USERPROFILE\Downloads\install-ack-voice-studio.ps1
+irm https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/install.ps1 -OutFile $env:USERPROFILE\Downloads\install-ack-voice-studio.ps1
 notepad $env:USERPROFILE\Downloads\install-ack-voice-studio.ps1
 powershell -ExecutionPolicy Bypass -File $env:USERPROFILE\Downloads\install-ack-voice-studio.ps1
 ```

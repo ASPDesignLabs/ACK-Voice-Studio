@@ -16,7 +16,7 @@ The folders and names used below (change them if yours differ):
 
 | What | Where |
 |---|---|
-| This tool's files (a checkout of the branch `claude/voice-studio-guided-setup`: **section 0**) | `~/ack-tools` |
+| This tool's files (a clone of the ACK Voice Studio repository: **section 0**) | `~/ack-tools` |
 | Freeform Studio's environment (from its own `install.sh`) | `~/freeform-studio-venv` |
 | The training programs (built by the tool in section I0; the hand-built `~/piper1-gpl` is not used) | `~/ack-voice-studio/tool/environments/training-…` |
 | The starting voice's checkpoint (a download from the training guide) | `~/piper/checkpoints/mike.ckpt` (or the file you have there) |
@@ -26,7 +26,7 @@ The folders and names used below (change them if yours differ):
 
 | Section | Title | In a few words |
 |---|---|---|
-| 0 | Get this branch (a clone of the main branch does not have this tool) | Make sure your copy of the tool has the tool in it. |
+| 0 | Get this repository (a clone of the ACK phone-app repository no longer has this tool) | Make sure your copy of the tool has the tool in it. |
 | A | Write down the computer first | Note which Ubuntu, kernel and Python you are on. |
 | B | The tool's own tests, on your Python | Run the tool's own tests once on your computer. |
 | C | The first terminal step | Ask the setup script to look. It changes nothing. |
@@ -60,24 +60,24 @@ The folders and names used below (change them if yours differ):
 | L | What to send back | What to write down and send back. |
 | M | Clean up (only the folders this list made) | Remove what this list made, and only that. |
 
-## 0. Get this branch (a clone of the main branch does not have this tool)
+## 0. Get this repository (a clone of the ACK phone-app repository no longer has this tool)
 
-Voice Studio is only on the branch `claude/voice-studio-guided-setup` until it is merged. A `~/ack-tools` you made from the main branch (the Freeform Studio
-install steps do that) has no `tools/voice_studio` folder, and the first command in section B then says "No such file or directory". Start every section in
-your own home folder (`cd ~`), not in a Windows folder under `/mnt/c`: it is much faster there, and the paths below assume it.
+ACK Voice Studio lives in its own repository, `ASPDesignLabs/ACK-Voice-Studio`. It was first built inside the ACK phone-app repository, so a `~/ack-tools` you made earlier (the
+Freeform Studio install steps did that) may have no `tools/voice_studio` folder at all, or an older copy of it, and its `git pull` follows the ACK repository, which does not have the
+newer files and will not keep this tool. Start every section in your own home folder (`cd ~`), not in a Windows folder under `/mnt/c`: it is much faster there, and the paths below assume it.
 
 - [ ] Look first. These only read:
   ```bash
   cd ~
-  git -C ~/ack-tools branch --show-current
+  git -C ~/ack-tools remote get-url origin
   ls ~/ack-tools/tools/voice_studio/run_tests.sh
   ```
-  → On the right branch: the branch name `claude/voice-studio-guided-setup` and the file name printed. On a clone of main: `main`, then "No such file or directory".
-- [ ] If it is not the right branch, **move the old folder aside (it keeps everything, and your Freeform Studio install in `~/freeform-studio-venv` does not live in
-  it), then clone this branch.** This is the same advice Freeform Studio's own README gives for a clone from another branch:
+  → On the right repository: an address ending in `ACK-Voice-Studio.git` and the file name printed. On a clone of the phone app's repository: an address ending in `ACK.git`, and perhaps "No such file or directory".
+- [ ] If it is not the right repository, **move the old folder aside (it keeps everything, and your Freeform Studio install in `~/freeform-studio-venv` and your projects in `~/ack-voice-studio` do not live in
+  it), then clone this repository.** Your projects and recordings are not touched:
   ```bash
   mv ~/ack-tools ~/ack-tools.old
-  git clone --branch claude/voice-studio-guided-setup https://github.com/ASPDesignLabs/ACK.git ~/ack-tools
+  git clone https://github.com/ASPDesignLabs/ACK-Voice-Studio.git ~/ack-tools
   ls ~/ack-tools/tools/voice_studio/run_tests.sh
   ```
   → The last line prints the file's name. If `mv` says `~/ack-tools.old` exists, choose another name; nothing is replaced. If you had changed files inside the old
@@ -218,7 +218,7 @@ Needs the internet once, only for the model, and asks first. About 480 MB.
 ## F. Bringing in a package from the phone
 
 On the phone, make a package with three or four cards: ACK → Audio Architect → Custom Voice → **RECORD TRAINING DATA**, read a few cards,
-then save the package to a file (the steps are in `docs/TRAINING_CAPTURE_DEVICE_TEST.md`, sections D and I). Move the `.zip` to this
+then save the package to a file (the steps are in the phone app's own checklist, `TRAINING_CAPTURE_DEVICE_TEST.md` in the `docs` folder of the ACK repository, sections D and I). Move the `.zip` to this
 computer. On WSL a Windows folder works (`/mnt/c/Users/<you>/Downloads/…`); note whether the copy-in felt slow.
 
 - [ ] Look first, with Freeform Studio's own command, writing nothing:
@@ -994,14 +994,14 @@ section I1. Run one command at a time, and wait for it to finish before you type
 
 **New, and not yet run on a clean Windows or on a native Ubuntu.** The guides are `docs/ACK_Voice_Studio_Installation_Guide.MD` (Windows, from PowerShell) and `docs/ACK_Voice_Studio_Installation_Guide_Ubuntu.MD`. They stand on their own, so do this
 section **with only the guide open**, as a person who has nothing else would. Write down every sentence in a guide that is unclear, and every command that did not do what the guide said. Until a release is tagged the commands fetch
-`main`, so this can only be run after the branch is merged; before that, use `-Ref claude/voice-studio-guided-setup` (Windows) or `ACK_VOICE_TAG=claude/voice-studio-guided-setup` (Ubuntu), and say so when you write results down.
+`main` of the ACK Voice Studio repository. To try another branch or a tag instead, use `-Ref NAME` (Windows) or `ACK_VOICE_TAG=NAME` (Ubuntu), and say so when you write results down.
 
 **A. A Windows that has never had WSL** (a spare computer, or one where `wsl --list` says there is none). Everything here is the Windows guide's section 2 and 3.
 
 - [ ] **Look only.** In an ordinary (not administrator) PowerShell:
   ```powershell
   $env:ACK_VOICE_CHECK = '1'
-  irm https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/install.ps1 | iex
+  irm https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/install.ps1 | iex
   Remove-Item Env:ACK_VOICE_CHECK
   ```
   → `Looking at this computer. Nothing is changed at this step.`, a line for the Windows build, the Nvidia driver (or the note that there is none) and the free room, then `WSL (Windows Subsystem for Linux) is not set up on this computer yet.`,
@@ -1492,7 +1492,7 @@ section **with only the guide open**, as a person who has nothing else would. Wr
 
 ## I13. Updating the tool
 
-**New, and not yet run on a real computer.** `update` looks at the releases of this tool and fetches one into a **new folder** beside the copy you run (the plan's decisions D11 and P21). A release is a git tag whose name begins with `voice-studio-` (the phone app's tags, `v1.0-beta.1` and the rest, are a different thing and are left out). It is the one command in this list that contacts the internet when you ask it to: it says first what it will ask github.com and shows the exact commands, then asks (a typed yes, or `--yes`), and with nobody to ask it contacts nothing and does nothing. **It never touches the copy it runs from, your projects, your recordings or your backups.** It cannot switch to the new copy for you, because it cannot replace the folder it is running from: it prints the commands, and you type them. **ACK Voice Studio has no named release yet** (ACK's repository holds only the phone app's tags, which are not releases of this tool), so until someone makes a tag that begins with `voice-studio-` on GitHub, `check` says there is nothing to fetch and `get` cannot be tried on the real address (parts C to F say what to do then).
+**New, and not yet run on a real computer.** `update` looks at the releases of this tool and fetches one into a **new folder** beside the copy you run (the plan's decisions D11 and P21). A release is a git tag whose name begins with `voice-studio-` (the phone app's tags, `v1.0-beta.1` and the rest, are a different thing and are left out). It is the one command in this list that contacts the internet when you ask it to: it says first what it will ask github.com and shows the exact commands, then asks (a typed yes, or `--yes`), and with nobody to ask it contacts nothing and does nothing. **It never touches the copy it runs from, your projects, your recordings or your backups.** It cannot switch to the new copy for you, because it cannot replace the folder it is running from: it prints the commands, and you type them. **ACK Voice Studio has no named release yet** (this repository starts with no tags at all; the phone app's tags, `v1.0-beta.1` and the rest, are in the phone app's repository and are not releases of this tool), so until someone makes a tag that begins with `voice-studio-` on GitHub, `check` says there is nothing to fetch and `get` cannot be tried on the real address (parts C to F say what to do then).
 
 *Built and tried in the build sandbox only, against a git repository made on the same computer with the tags `voice-studio-v1.0` and `voice-studio-v1.1` (listed as `v1.0` and `v1.1`) and one phone-app tag that was left out. Not run on a real computer, never over a real connection and never against github.com.*
 
@@ -1508,7 +1508,7 @@ section **with only the guide open**, as a person who has nothing else would. Wr
   PYTHONPATH=~/ack-tools/tools python3 -m voice_studio.update get "no good" --yes
   echo "exit: $?"
   ```
-  → `help` lists `check` and `get` and ends with `Nothing is contacted unless you say yes, nothing is checked in the background, and --yes answers the one question of that run only. No project, recording or backup is touched.` `check` says `ACK Voice Studio: update`, which version and folder this copy is, `It contacts the internet to ask which releases of ACK Voice Studio exist, and to fetch one when you choose.`, `Like any request on the internet it carries this computer's address and the name of the program asking. Nothing you recorded, typed or made is sent, and nothing is saved.`, the exact command it would run, `Only tags whose names begin with voice-studio- are releases of this tool. ACK's repository also holds the phone app's tags, and those are left out.`, and `There was nobody to ask. To say yes on the command line, add --yes. Nothing was done.` with `exit: 2`. `get` with no name says `Say which release to fetch, for example: …` and `Nothing was done.` (`exit: 2`). The last says `A release name is made of letters, numbers, dots, dashes and underscores only.` and `Nothing was done.` (`exit: 2`). Check the copy was not touched: `git -C ~/ack-tools status --short` prints nothing that you did not change yourself.
+  → `help` lists `check` and `get` and ends with `Nothing is contacted unless you say yes, nothing is checked in the background, and --yes answers the one question of that run only. No project, recording or backup is touched.` `check` says `ACK Voice Studio: update`, which version and folder this copy is, `It contacts the internet to ask which releases of ACK Voice Studio exist, and to fetch one when you choose.`, `Like any request on the internet it carries this computer's address and the name of the program asking. Nothing you recorded, typed or made is sent, and nothing is saved.`, the exact command it would run, `Only tags whose names begin with voice-studio- are releases of this tool. Any other tag is left out.`, and `There was nobody to ask. To say yes on the command line, add --yes. Nothing was done.` with `exit: 2`. `get` with no name says `Say which release to fetch, for example: …` and `Nothing was done.` (`exit: 2`). The last says `A release name is made of letters, numbers, dots, dashes and underscores only.` and `Nothing was done.` (`exit: 2`). Check the copy was not touched: `git -C ~/ack-tools status --short` prints nothing that you did not change yourself.
 - [ ] Ask for a folder that is not a whole path, and for one that exists already:
   ```bash
   PYTHONPATH=~/ack-tools/tools python3 -m voice_studio.update get v1.0 --to relative/folder --yes
@@ -1942,7 +1942,7 @@ Get the file one of two ways: the unsigned file the workflow `voice-studio-insta
 **B. The pages.** Go slowly; write down anything cut off, anything you could not read, and anything you did not understand.
 
 - [ ] The welcome page, then the licence page. → The licence is the GPL text and Next goes on (there is nothing to tick).
-- [ ] **Where everything comes from.** → It says the setup program holds no copy of ACK and names the five places (ACK on GitHub, Ubuntu and WSL from Microsoft, Ubuntu's own programs, the training programs and the starting voice, and that your recordings stay on this computer). Write down whether you could follow it.
+- [ ] **Where everything comes from.** → It says the setup program holds no copy of ACK Voice Studio and names the five places (ACK Voice Studio on GitHub, Ubuntu and WSL from Microsoft, Ubuntu's own programs, the training programs and the starting voice, and that your recordings stay on this computer). Write down whether you could follow it.
 - [ ] **Looking at this computer.** → It lists what it found (Windows build, disk room, graphics card, WSL, Ubuntu) and changes nothing. Next is switched off until the look is done, and stays off if the computer cannot be used. Write down how long it took and what it listed.
 - [ ] **An account for Ubuntu** (it is skipped when Ubuntu already has an account). → Name, password, password again. Try each of these and write down what each said: nothing typed; two passwords that differ; the name `root`; a password of five characters; a password with an accent in it. **Every one is refused with a message and nothing is changed.**
 - [ ] Look at the words on that page about the password. → It says the setup program sees the password, sends it once to Ubuntu and does not save it. Write down whether you were comfortable with that and whether the page made it clear that the command-line installer works differently.

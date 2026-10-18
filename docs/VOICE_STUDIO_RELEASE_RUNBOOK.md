@@ -5,9 +5,9 @@ nothing here runs until a person types it.
 
 ## What a release is
 
-A release is a **git tag** named `voice-studio-v` plus the version, for example `voice-studio-v0.1.0`. The repository also holds the phone app's tags (`v1.0-beta.1` to `v1.0-beta.7`).
-Those are not releases of this tool: the registry (`tools/voice_studio/data/sources.json`, under `releases`, as `tag_prefix`) makes `python3 -m voice_studio.update` count only tags that
-begin with `voice-studio-`, and show them without it (`v0.1.0`). The tool's own history is `tools/voice_studio/CHANGELOG.md`; the app's is `CHANGELOG.md` at the top of the repository, and
+A release is a **git tag** named `voice-studio-v` plus the version, for example `voice-studio-v0.1.0`. The phone app's tags (`v1.0-beta.1` to `v1.0-beta.7`) are in the phone app's repository, where this tool lived until it was split out;
+they are not releases of this tool and this repository starts with none: the registry (`tools/voice_studio/data/sources.json`, under `releases`, as `tag_prefix`) makes `python3 -m voice_studio.update` count only tags that
+begin with `voice-studio-`, and show them without it (`v0.1.0`). The tool's own history is `tools/voice_studio/CHANGELOG.md`; the phone app's changelog is in the phone app's repository, and
 a release of the tool does not touch it.
 
 A tag is **not signed**. `update get` checks only that the copy it fetched holds the commit GitHub listed for the tag and that it is a copy of this tool (plan decision P21), so a tag says
@@ -49,7 +49,7 @@ until the checklist (`docs/VOICE_STUDIO_DEVICE_TEST.md`) has been run on a real 
 6. **Commit and merge** ("Voice Studio X.Y.Z"), as any change goes in.
 7. **Make the tag on the merge commit** and push it:
    `git tag -a voice-studio-vX.Y.Z -m "ACK Voice Studio X.Y.Z"` and `git push origin voice-studio-vX.Y.Z`. An annotated tag is what to make; the update command reads both kinds.
-8. **Look at it from outside.** `git ls-remote --tags https://github.com/ASPDesignLabs/ACK.git 'voice-studio-*'` lists the tag. On a computer, `python3 -m voice_studio.update check` lists the
+8. **Look at it from outside.** `git ls-remote --tags https://github.com/ASPDesignLabs/ACK-Voice-Studio.git 'voice-studio-*'` lists the tag. On a computer, `python3 -m voice_studio.update check` lists the
    release (it asks first), and the one command in an installation guide now fetches it. Run sections I7 and I13 of the checklist against the tag and write what happened in them.
 9. **Open the next version.** In `tools/voice_studio/__init__.py` set `__version__` to the next PATCH number, and add an empty `## [X.Y.Z+1] - Unreleased` entry at the top of the changelog
    (the test requires the two to move together). `get.sh` and `install.ps1` keep the release's tag as their default; they are changed again only by the next release.

@@ -3,7 +3,7 @@
 
 Plain Python with no GTK, so every rule here is tested on any computer. The GTK edge (window/theme.py) only loads the text this module makes.
 
-Where it comes from: ACK's phone app (ui/theme/Color.kt, ui/DesignSystem.kt, ui/OverlayStyle.kt) and its website (STYLEGUIDE.md): void black and graphite surfaces, one neon accent, monospace bold
+Where it comes from: ACK's phone app (ui/theme/Color.kt, ui/DesignSystem.kt, ui/OverlayStyle.kt) and its website (STYLEGUIDE.md; both are in the phone app's repository): void black and graphite surfaces, one neon accent, monospace bold
 capitals for headings, buttons and labels, a 1 px accent border, and the signature cut corners (top left and bottom right). Three things are done differently here, on purpose:
 
 * **Cut corners are drawn with CSS gradients**, not code, because GTK 4.6 (Ubuntu 22.04) has no `clip-path` and drawing them in code would need a package that Ubuntu does not install by default.

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # ACK Voice Studio on Windows: one command from PowerShell that ends at the window (plan task VS-7.1 and VS-7.2).
 #
-#   irm https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/install.ps1 | iex
+#   irm https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/install.ps1 | iex
 #
 # What it does, in order, and asks before each change:
 #   1. Looks at this computer (Windows version, virtualization, graphics driver, free room). Changes nothing.
@@ -28,7 +28,7 @@
 
 function Get-AckVsSettings {
     @{
-        Repo           = 'ASPDesignLabs/ACK'
+        Repo           = 'ASPDesignLabs/ACK-Voice-Studio'
         DefaultRef     = 'main'              # what is fetched when nothing is chosen; get.sh holds the same word. A release name replaces it when one is cut.
         InstallDistro  = 'Ubuntu-24.04'
         Accepted       = @('Ubuntu-24.04', 'Ubuntu-22.04', 'Ubuntu')
@@ -36,7 +36,7 @@ function Get-AckVsSettings {
         MinFreeGiB     = 25                  # the tool's own bare minimum (docs/VOICE_STUDIO_IT_GUIDE.md section 3)
         GetScript      = 'tools/voice_studio/get.sh'
         RawHost        = 'https://raw.githubusercontent.com'
-        OneLiner       = 'irm https://raw.githubusercontent.com/ASPDesignLabs/ACK/main/tools/voice_studio/install.ps1 | iex'
+        OneLiner       = 'irm https://raw.githubusercontent.com/ASPDesignLabs/ACK-Voice-Studio/main/tools/voice_studio/install.ps1 | iex'
     }
 }
 

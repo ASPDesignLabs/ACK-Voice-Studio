@@ -98,12 +98,12 @@ def test_every_snippet_the_checklist_relies_on_is_there_and_nothing_else_is_mark
         assert fenced_after(name), name
 
 
-def test_it_says_how_to_get_the_branch_this_tool_is_on_before_anything_needs_it():
+def test_it_says_how_to_get_the_repository_this_tool_is_in_before_anything_needs_it():
     text = doc_text()
     first_use = text.index("run_tests.sh")
-    step = text.index("## 0. Get this branch")
+    step = text.index("## 0. Get this repository")
     assert step < text.index("## B.") and step < first_use, "the clone comes before the first command that needs it"
-    assert "git clone --branch claude/voice-studio-guided-setup https://github.com/ASPDesignLabs/ACK.git ~/ack-tools" in text
+    assert "git clone https://github.com/ASPDesignLabs/ACK-Voice-Studio.git ~/ack-tools" in text and "git -C ~/ack-tools remote get-url origin" in text
     assert "mv ~/ack-tools ~/ack-tools.old" in text, "an older folder is moved aside, never replaced"
 
 

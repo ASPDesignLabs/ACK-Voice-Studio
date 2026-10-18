@@ -125,7 +125,7 @@ def test_the_wizard_downloads_nothing_and_opens_no_web_page():
 def test_the_one_web_address_it_names_is_the_one_install_ps1_fetches_from():
     repo = re.search(r"Repo\s*=\s*'([^']+)'", read(INSTALL_PS1)).group(1)
     host = re.search(r"RawHost\s*=\s*'https://raw\.githubusercontent\.com'", read(INSTALL_PS1))
-    assert host and repo == "ASPDesignLabs/ACK"
+    assert host and repo == "ASPDesignLabs/ACK-Voice-Studio"
     assert ("github.com/" + repo) in NSI_TEXT
     assert re.findall(r"[a-z0-9-]+\.(?:com|org|net|io)/[A-Za-z0-9_./-]+", NSI_TEXT) == ["github.com/" + repo]
 
